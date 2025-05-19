@@ -24,5 +24,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             return await _context.Sales.FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
         }
+
+        public async Task<Sale?> GetBySaleNumberAsync(string saleNumber, CancellationToken cancellationToken = default)
+        {
+            return await _context.Sales.FirstOrDefaultAsync(o => o.SaleNumber.ToLower().Equals(saleNumber.ToLower()), cancellationToken);
+        }
     }
 }

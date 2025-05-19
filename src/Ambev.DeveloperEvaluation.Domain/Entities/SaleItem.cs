@@ -11,10 +11,9 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public decimal Discount { get; private set; }
         public decimal Total => Quantity * UnitPrice * (1 - Discount);
         
-        public SaleItem(Guid productId, Guid saleId ,int quantity, decimal unitPrice)
+        public SaleItem(Guid productId, int quantity, decimal unitPrice)
         {
             ProductId = productId;
-            SaleId = saleId;
             Quantity = quantity;
             UnitPrice = unitPrice;
 

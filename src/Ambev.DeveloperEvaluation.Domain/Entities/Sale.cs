@@ -19,6 +19,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             BranchId = branchId;
         }
 
+        public void AddItem(SaleItem item)
+        {
+            Items.Add(item);
+        }
+
         public void Cancel() => IsCancelled = !IsCancelled;
     }
 }

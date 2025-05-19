@@ -29,5 +29,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             return await _context.Sales.FirstOrDefaultAsync(o => o.SaleNumber.ToLower().Equals(saleNumber.ToLower()), cancellationToken);
         }
+
+        public async Task UpdateAsync(Sale sale, CancellationToken cancellationToken = default)
+        {
+            _context.Sales.Update(sale);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

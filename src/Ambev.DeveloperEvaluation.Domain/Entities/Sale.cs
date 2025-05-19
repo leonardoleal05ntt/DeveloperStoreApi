@@ -24,6 +24,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             Items.Add(item);
         }
 
+        public void RemoveItem(SaleItem item)
+        {
+            Items.Remove(item);
+        }
+
         public void Cancel() => IsCancelled = !IsCancelled;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Common;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
@@ -20,6 +21,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             if (quantity >= 10) Discount = 0.20m;
             else if (quantity >= 4) Discount = 0.10m;
             else Discount = 0.0m;
+        }
+
+        public void Update(int quantity, decimal unitPrice)
+        {
+            Quantity = quantity;
+            UnitPrice = unitPrice;
         }
 
         private SaleItem() { }

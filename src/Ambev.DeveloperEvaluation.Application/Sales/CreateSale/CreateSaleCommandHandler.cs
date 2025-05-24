@@ -36,7 +36,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale
                 throw new InvalidOperationException($"Branch with Id {command.BranchId} does not exist");
 
             var existingSale = await _saleRepository.GetBySaleNumberAsync(command.SaleNumber, cancellationToken);
-            if (existingSale == null)
+            if (existingSale != null)
                 throw new InvalidOperationException($"Sale with number {command.SaleNumber} already exists");
 
             var sale = new Sale(command.SaleNumber, command.CustomerId, command.BranchId);

@@ -1,6 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Customers.CreateCustomer;
+using Ambev.DeveloperEvaluation.Application.Customers.GetCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.CreateCustomer;
+using Ambev.DeveloperEvaluation.WebApi.Features.Customers.GetCustomer;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
 {
     /// <summary>
-    /// Controller for managing user operations
+    /// Controller for managing customer operations
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -25,7 +27,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
         /// <summary>
         /// Creates a new customer
         /// </summary>
-        /// <param name="request">The user creation request</param>
+        /// <param name="request">The customer creation request</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The created customer details</returns>
         [HttpPost]
@@ -47,6 +49,36 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
                 Success = true,
                 Message = "Customer created successfully",
                 Data = response
+            });
+        }
+
+        /// <summary>
+        /// Retrieves a customer by their ID
+        /// </summary>
+        /// <param name="id">The unique identifier of the customer</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The customer details if found</returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<GetCustomerResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUser([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var request = new GetCustomerRequest { Id = id };
+            var validator = new GetCustomerRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<GetCustomerCommand>(request.Id);
+            var response = await _mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<GetCustomerResponse>
+            {
+                Success = true,
+                Message = "Customer retrieved successfully",
+                Data = _mapper.Map<GetCustomerResponse>(response)
             });
         }
     }

@@ -19,6 +19,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
                    .IsRequired()
                    .HasMaxLength(100);
 
+            builder.Property(b => b.DocumentNumber)
+                   .IsRequired()
+                   .HasMaxLength(36);
+
             builder.Property(b => b.Active)
                    .IsRequired();
         }

@@ -1,84 +1,84 @@
-﻿using Ambev.DeveloperEvaluation.Application.Customers.CreateCustomer;
-using Ambev.DeveloperEvaluation.Application.Customers.GetCustomer;
+﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Customers.CreateCustomer;
-using Ambev.DeveloperEvaluation.WebApi.Features.Customers.GetCustomer;
+using Ambev.DeveloperEvaluation.WebApi.Features.Product.CreateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Product.GetProduct;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Product
 {
     /// <summary>
-    /// Controller for managing customer operations
+    /// Controller for managing product operations
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class CustomersController : BaseController
+    public class ProductsController : BaseController
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        public CustomersController(IMediator mediator, IMapper mapper)
+        public ProductsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Creates a new customer
+        /// Creates a new product
         /// </summary>
-        /// <param name="request">The customer creation request</param>
+        /// <param name="request">The product creation request</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The created customer details</returns>
+        /// <returns>The created product details</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponseWithData<Guid>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
         {
-            var validator = new CreateCustomerRequestValidator();
+            var validator = new CreateProductRequestValidator();
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var command = _mapper.Map<CreateCustomerCommand>(request);
+            var command = _mapper.Map<CreateProductCommand>(request);
             var response = await _mediator.Send(command, cancellationToken);
 
             return Created(string.Empty, new ApiResponseWithData<Guid>
             {
                 Success = true,
-                Message = "Customer created successfully",
+                Message = "Product created successfully",
                 Data = response
             });
         }
 
         /// <summary>
-        /// Retrieves a customer by their ID
+        /// Retrieves a product by their ID
         /// </summary>
-        /// <param name="id">The unique identifier of the customer</param>
+        /// <param name="id">The unique identifier of the product</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The customer details if found</returns>
+        /// <returns>The product details if found</returns>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResponseWithData<GetCustomerResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCustomer([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var request = new GetCustomerRequest { Id = id };
-            var validator = new GetCustomerRequestValidator();
+            var request = new GetProductRequest { Id = id };
+            var validator = new GetProductRequestValidator();
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var command = _mapper.Map<GetCustomerCommand>(request.Id);
+            var command = _mapper.Map<GetProductCommand>(request.Id);
             var response = await _mediator.Send(command, cancellationToken);
 
-            return Ok(new ApiResponseWithData<GetCustomerResponse>
+            return Ok(new ApiResponseWithData<GetProductResponse>
             {
                 Success = true,
-                Message = "Customer retrieved successfully",
-                Data = _mapper.Map<GetCustomerResponse>(response)
+                Message = "Product retrieved successfully",
+                Data = _mapper.Map<GetProductResponse>(response)
             });
         }
     }

@@ -29,5 +29,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             return await _context.Products.Where(o => ids.Contains(o.Id)).ToListAsync(cancellationToken);
         }
+
+        public async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

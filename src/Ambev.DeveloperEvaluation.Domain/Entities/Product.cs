@@ -13,6 +13,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             Active = true;
         }
 
+        public void Edit(string name)
+        {
+            Name = name;
+        }
+
         public void Inactive() => Active = !Active;
     }
 }

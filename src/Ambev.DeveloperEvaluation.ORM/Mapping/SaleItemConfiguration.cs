@@ -34,7 +34,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
                    .IsRequired()
                    .HasColumnType("decimal(5,2)");
 
-            builder.Ignore(i => i.Total); 
+            builder.Ignore(i => i.Total);
+
+            builder.HasOne(si => si.Product)
+                    .WithMany()
+                    .HasForeignKey(si => si.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -31,7 +31,17 @@ namespace Ambev.DeveloperEvaluation.ORM.Mapping
             builder.Property(s => s.IsCancelled)
                    .IsRequired();
 
-            builder.Ignore(s => s.Total); 
+            builder.Ignore(s => s.Total);
+
+            builder.HasOne(s => s.Customer)
+                    .WithMany()
+                    .HasForeignKey(s => s.CustomerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(s => s.Branch)
+                    .WithMany()
+                    .HasForeignKey(s => s.BranchId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(s => s.Items)
                    .WithOne()

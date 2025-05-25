@@ -11,6 +11,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public bool IsCancelled { get; private set; }
         public List<SaleItem> Items { get; private set; } = new List<SaleItem>();
         public decimal Total => Items.Sum(x => x.Total);
+        public Customer Customer { get; private set; }
+        public Branch Branch { get; private set; }
 
         public Sale(string saleNumber, Guid customerId, Guid branchId)
         {

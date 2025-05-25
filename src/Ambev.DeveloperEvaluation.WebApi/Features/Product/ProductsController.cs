@@ -1,12 +1,13 @@
-﻿using Ambev.DeveloperEvaluation.Application.Customers.EditCustomer;
-using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.EditProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
+using Ambev.DeveloperEvaluation.Application.Products.ListProduct;
+using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Customers.EditCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Product.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Product.EditProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Product.GetProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Product.ListProduct;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -115,6 +116,40 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Product
             {
                 Success = true,
                 Message = "Product updated successfully"
+            });
+        }
+
+        /// <summary>
+        /// Retrieves a paginated list of products
+        /// </summary>
+        /// <param name="request">Pagination and search parameters</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Paged list of products</returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponseWithData<PagedResult<ListProductResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPagedProducts([FromQuery] ListProductRequest request, CancellationToken cancellationToken)
+        {
+            var validator = new ListProductRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<ListProductCommand>(request);
+            var pagedResult = await _mediator.Send(command, cancellationToken);
+
+            var response = new PagedResult<ListProductResponse>
+            {
+                Items = _mapper.Map<IEnumerable<ListProductResponse>>(pagedResult.Items),
+                TotalCount = pagedResult.TotalCount
+            };
+
+            return Ok(new ApiResponseWithData<PagedResult<ListProductResponse>>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = response
             });
         }
     }

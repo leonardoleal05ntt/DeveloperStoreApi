@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Customers.InactiveCustomer
 {
-    internal class InactiveCustomerCommandHandler : IRequestHandler<InactiveCustomerCommand>
+    public class InactiveCustomerCommandHandler : IRequestHandler<InactiveCustomerCommand>
     {
         private readonly ICustomerRepository _customerRepository;
         public InactiveCustomerCommandHandler(ICustomerRepository customerRepository)

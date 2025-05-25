@@ -6,7 +6,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Product.CreateProduct
     {
         public CreateProductRequestValidator()
         {
-            RuleFor(user => user.Name).NotEmpty().Length(3, 50);
+            RuleFor(p => p.Name).NotEmpty().Length(3, 50);
         }
     }
 }

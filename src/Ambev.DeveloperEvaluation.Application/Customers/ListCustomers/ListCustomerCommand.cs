@@ -8,12 +8,14 @@ namespace Ambev.DeveloperEvaluation.Application.Customers.ListCustomers
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string? Search { get; set; } 
+        public bool? Active { get; set; } 
 
-        public ListCustomerCommand(int pageNumber, int pageSize, string? search)
+        public ListCustomerCommand(int pageNumber, int pageSize, bool? active, string? search)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
             Search = search;
+            Active = active;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return await _context.Customers.FirstOrDefaultAsync(o => o.DocumentNumber.ToLower().Equals(documentNumber.ToLower()), cancellationToken);
         }
 
-        public async Task<PagedResult<Customer>> GetPagedAsync(int pageNumber, int pageSize, string? search = null, CancellationToken cancellationToken = default)
+        public async Task<PagedResult<Customer>> GetPagedAsync(int pageNumber, int pageSize, string? search = null, bool? active = null, CancellationToken cancellationToken = default)
         {
             IQueryable<Customer> query = _context.Customers;
 
@@ -42,8 +42,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                     c.DocumentNumber.Contains(search));
             }
 
-            int totalCount = await query.CountAsync(cancellationToken);
+            if (active.HasValue)
+                query = query.Where(c => c.Active == active.Value);
 
+            int totalCount = await query.CountAsync(cancellationToken);
             var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -54,6 +56,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 Items = items,
                 TotalCount = totalCount
             };
+        }
+
+        public async Task UpdateAsync(Customer customer, CancellationToken cancellationToken = default)
+        {
+            _context.Customers.Update(customer);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

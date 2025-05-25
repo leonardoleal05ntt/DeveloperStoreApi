@@ -27,7 +27,7 @@ namespace Ambev.DeveloperEvaluation.Application.Customers.ListCustomers
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
 
-            var pagedResult = await _customerRepository.GetPagedAsync(request.PageNumber, request.PageSize, request.Search, cancellationToken);
+            var pagedResult = await _customerRepository.GetPagedAsync(request.PageNumber, request.PageSize, request.Search, request.Active, cancellationToken);
 
             var dtoItems = _mapper.Map<IEnumerable<ListCustomerResult>>(pagedResult.Items);
 

@@ -1,10 +1,12 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Customers.CreateCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.GetCustomer;
+using Ambev.DeveloperEvaluation.Application.Customers.InactiveCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.ListCustomers;
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.CreateCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.GetCustomer;
+using Ambev.DeveloperEvaluation.WebApi.Features.Customers.InactiveCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.ListCustomer;
 using AutoMapper;
 using MediatR;
@@ -118,5 +120,35 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
                 Data = response
             });
         }
+
+        /// <summary>
+        /// Inactivates a customer by their ID
+        /// </summary>
+        /// <param name="id">The unique identifier of the customer</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The customer details if found</returns>
+        [HttpPut("{id}/inactive")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> InactiveCustomer([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var request = new InactiveCustomerRequest { Id = id };
+            var validator = new InactiveCustomerRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<InactiveCustomerCommand>(request);
+            await _mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<Guid>
+            {
+                Success = true,
+                Message = "Customer inactivated successfully"
+            });
+        }
+
     }
 }

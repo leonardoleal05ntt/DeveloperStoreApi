@@ -15,6 +15,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             Active = true;
         }
 
+        public void Edit(string name, string documentNumber)
+        {
+            Name = name;
+            DocumentNumber = documentNumber;
+        }
+
         public void Inactive() => Active = !Active;
     }
 }

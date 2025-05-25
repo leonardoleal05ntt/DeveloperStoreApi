@@ -1,10 +1,12 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Customers.CreateCustomer;
+using Ambev.DeveloperEvaluation.Application.Customers.EditCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.GetCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.InactiveCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.ListCustomers;
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.CreateCustomer;
+using Ambev.DeveloperEvaluation.WebApi.Features.Customers.EditCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.GetCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.InactiveCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.ListCustomer;
@@ -147,6 +149,38 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
             {
                 Success = true,
                 Message = "Customer inactivated successfully"
+            });
+        }
+
+        /// <summary>
+        /// Updates an existing customer
+        /// </summary>
+        /// <param name="id">The unique identifier of the customer</param>
+        /// <param name="request">The customer update request</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The updated customer details</returns>
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateCustomer([FromRoute] Guid id, [FromBody] EditCustomerRequest request, CancellationToken cancellationToken)
+        {
+            if (id != request.Id)
+                return BadRequest("The ID in the route does not match the ID in the request body.");
+
+            var validator = new EditCustomerRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<EditCustomerCommand>(request);
+            await _mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<Guid>
+            {
+                Success = true,
+                Message = "Customer updated successfully"
             });
         }
 

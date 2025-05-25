@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.EditProduct
 {
-    internal class EditProductCommandHandler : IRequestHandler<EditProductCommand>
+    public class EditProductCommandHandler : IRequestHandler<EditProductCommand>
     {
         private readonly IProductRepository _productRepository;
         public EditProductCommandHandler(IProductRepository productRepository)

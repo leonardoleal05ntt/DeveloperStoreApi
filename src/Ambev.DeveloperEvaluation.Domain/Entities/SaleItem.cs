@@ -1,5 +1,4 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Common;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {

@@ -1,8 +1,11 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Customers.CreateCustomer;
 using Ambev.DeveloperEvaluation.Application.Customers.GetCustomer;
+using Ambev.DeveloperEvaluation.Application.Customers.ListCustomers;
+using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.CreateCustomer;
 using Ambev.DeveloperEvaluation.WebApi.Features.Customers.GetCustomer;
+using Ambev.DeveloperEvaluation.WebApi.Features.Customers.ListCustomer;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -79,6 +82,40 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Customers
                 Success = true,
                 Message = "Customer retrieved successfully",
                 Data = _mapper.Map<GetCustomerResponse>(response)
+            });
+        }
+
+        /// <summary>
+        /// Retrieves a paginated list of customers
+        /// </summary>
+        /// <param name="request">Pagination and search parameters</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Paged list of customers</returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponseWithData<PagedResult<ListCustomerResponse>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPagedCustomers([FromQuery] ListCustomerRequest request, CancellationToken cancellationToken)
+        {
+            var validator = new ListCustomerRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<ListCustomerCommand>(request);
+            var pagedResult = await _mediator.Send(command, cancellationToken);
+
+            var response = new PagedResult<ListCustomerResponse>
+            {
+                Items = _mapper.Map<IEnumerable<ListCustomerResponse>>(pagedResult.Items),
+                TotalCount = pagedResult.TotalCount
+            };
+
+            return Ok(new ApiResponseWithData<PagedResult<ListCustomerResponse>>
+            {
+                Success = true,
+                Message = "Customers retrieved successfully",
+                Data = response
             });
         }
     }

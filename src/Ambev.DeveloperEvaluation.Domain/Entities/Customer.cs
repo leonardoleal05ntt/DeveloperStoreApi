@@ -21,6 +21,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             DocumentNumber = documentNumber;
         }
 
-        public void Inactive() => Active = !Active;
+        public void Inactive()
+        {
+            if (!Active)
+                throw new InvalidOperationException("Customer is already inactive.");
+
+            Active = false;
+        }
     }
 }

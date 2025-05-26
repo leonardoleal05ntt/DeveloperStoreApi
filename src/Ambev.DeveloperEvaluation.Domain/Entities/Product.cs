@@ -18,6 +18,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             Name = name;
         }
 
-        public void Inactive() => Active = !Active;
+        public void Inactive()
+        {
+            if (!Active)
+                throw new InvalidOperationException("Product is already inactive.");
+
+            Active = false;
+        }
     }
 }

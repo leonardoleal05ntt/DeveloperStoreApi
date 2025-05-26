@@ -23,7 +23,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
         public async Task<Sale?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _context.Sales.FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
+            return await _context.Sales
+                        .Include(s => s.Customer)
+                        .Include(s => s.Branch)
+                        .Include(s => s.Items)
+                            .ThenInclude(i => i.Product)
+                        .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
         }
 
         public async Task<Sale?> GetBySaleNumberAsync(string saleNumber, CancellationToken cancellationToken = default)

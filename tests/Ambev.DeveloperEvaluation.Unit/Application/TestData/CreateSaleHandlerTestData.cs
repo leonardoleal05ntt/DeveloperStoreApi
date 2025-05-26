@@ -4,7 +4,7 @@ using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.TestData
 {
-    public static class CreateSaleCommandTestData
+    public static class CreateSaleHandlerTestData
     {
         private static readonly Faker<CreateSaleItemDto> CreateSaleItemDtoFaker = new Faker<CreateSaleItemDto>()
             .RuleFor(i => i.ProductId, f => ProductTestData.GenerateValidProduct().Id)

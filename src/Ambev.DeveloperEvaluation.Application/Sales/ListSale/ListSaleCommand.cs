@@ -10,7 +10,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.ListSale
         public string? Search { get; set; }
         public bool? Cancelled { get; set; }
 
-        public ListSaleCommand(int pageNumber, int pageSize, bool? cancelled, string? search)
+        public ListSaleCommand(int pageNumber, int pageSize, bool? cancelled = null, string? search = null)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;

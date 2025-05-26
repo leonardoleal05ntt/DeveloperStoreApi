@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application
 {
-    public class EditSaleCommandHandlerTests
+    public class EditSaleHandlerTests
     {
         private readonly Mock<ISaleRepository> _mockSaleRepository;
         private readonly Mock<ICustomerRepository> _mockCustomerRepository;
@@ -17,7 +17,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly EditSaleCommandHandler _handler;
 
-        public EditSaleCommandHandlerTests()
+        public EditSaleHandlerTests()
         {
             _mockSaleRepository = new Mock<ISaleRepository>();
             _mockCustomerRepository = new Mock<ICustomerRepository>();

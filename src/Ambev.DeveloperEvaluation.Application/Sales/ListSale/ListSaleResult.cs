@@ -8,6 +8,7 @@
         public string BranchName { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalSale { get; set; }
+        public bool IsCancelled { get; set; }
         public List<ListSaleItemResult> Items { get; set; } = new List<ListSaleItemResult>();
     }
 }

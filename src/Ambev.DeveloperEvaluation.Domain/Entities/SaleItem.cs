@@ -10,17 +10,31 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public decimal UnitPrice { get; private set; }
         public decimal Discount { get; private set; }
         public decimal Total => Quantity * UnitPrice * (1 - Discount);
-        
-        public SaleItem(Guid productId, Guid saleId ,int quantity, decimal unitPrice)
+        public Product Product { get; private set; }
+
+        public SaleItem(Guid productId, int quantity, decimal unitPrice)
         {
             ProductId = productId;
-            SaleId = saleId;
             Quantity = quantity;
             UnitPrice = unitPrice;
+            RecalculateDiscount();
+        }
 
-            if (quantity >= 10) Discount = 0.20m;
-            else if (quantity >= 4) Discount = 0.10m;
-            else Discount = 0.0m;
+        public void Update(int quantity, decimal unitPrice)
+        {
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            RecalculateDiscount();
+        }
+
+        private void RecalculateDiscount()
+        {
+            if (Quantity >= 10)
+                Discount = 0.20m;
+            else if (Quantity >= 4)
+                Discount = 0.10m;
+            else
+                Discount = 0.0m;
         }
 
         private SaleItem() { }

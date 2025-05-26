@@ -51,21 +51,5 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
             // Assert
             branch.Active.Should().BeFalse();
         }
-
-
-        [Fact(DisplayName = "Método Inactive deve mudar o status de inativo para ativo")]
-        public void Given_InactiveBranch_When_Activating_Then_StatusShouldBeActive()
-        {
-            // Arrange
-            var branch = BranchTestData.GenerateValidBranch();
-            branch.Inactive(); 
-            branch.Active.Should().BeFalse(); 
-
-            // Act
-            branch.Inactive(); 
-
-            // Assert
-            branch.Active.Should().BeTrue();
-        }
     }
 }

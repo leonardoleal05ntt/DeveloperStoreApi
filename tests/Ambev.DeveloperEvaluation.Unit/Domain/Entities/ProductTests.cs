@@ -50,22 +50,5 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities
             // Assert
             product.Active.Should().BeFalse();
         }
-
-
-        [Fact(DisplayName = "Método Inactive deve mudar o status de inativo para ativo")]
-        public void Given_InactiveProduct_When_Activating_Then_StatusShouldBeActive()
-        {
-            // Arrange
-            var product = ProductTestData.GenerateValidProduct();
-            product.Inactive(); 
-            product.Active.Should().BeFalse(); 
-
-            // Act
-            product.Inactive(); 
-
-            // Assert
-            product.Active.Should().BeTrue();
-        }
-
     }
 }

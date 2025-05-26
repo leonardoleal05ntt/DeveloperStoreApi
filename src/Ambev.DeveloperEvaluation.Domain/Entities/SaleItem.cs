@@ -17,16 +17,24 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             ProductId = productId;
             Quantity = quantity;
             UnitPrice = unitPrice;
-
-            if (quantity >= 10) Discount = 0.20m;
-            else if (quantity >= 4) Discount = 0.10m;
-            else Discount = 0.0m;
+            RecalculateDiscount();
         }
 
         public void Update(int quantity, decimal unitPrice)
         {
             Quantity = quantity;
             UnitPrice = unitPrice;
+            RecalculateDiscount();
+        }
+
+        private void RecalculateDiscount()
+        {
+            if (Quantity >= 10)
+                Discount = 0.20m;
+            else if (Quantity >= 4)
+                Discount = 0.10m;
+            else
+                Discount = 0.0m;
         }
 
         private SaleItem() { }

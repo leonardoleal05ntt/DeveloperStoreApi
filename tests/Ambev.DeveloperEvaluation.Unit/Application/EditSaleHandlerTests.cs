@@ -148,7 +148,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
 
             _mockBranchRepository
                 .Setup(r => r.GetByIdAsync(command.BranchId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Branch)null);
+                .ReturnsAsync((DeveloperEvaluation.Domain.Entities.Branch)null);
 
             // Act
             var act = async () => await _handler.Handle(command, CancellationToken.None);

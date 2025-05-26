@@ -126,7 +126,7 @@ namespace Ambev.DeveloperEvaluation.Unit.Application
                 .ReturnsAsync(customer);
 
             _mockBranchRepository.Setup(r => r.GetByIdAsync(command.BranchId, It.Is<CancellationToken>(c => true)))
-                .ReturnsAsync((Branch)null);
+                .ReturnsAsync((DeveloperEvaluation.Domain.Entities.Branch)null);
 
             _mockSaleRepository.Setup(r => r.GetBySaleNumberAsync(command.SaleNumber, It.Is<CancellationToken>(c => true)))
                 .ReturnsAsync((Sale)null);

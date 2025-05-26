@@ -73,6 +73,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.EditSale
                 existingSale.RemoveItem(item);
             }
 
+            existingSale.Update(command.SaleNumber, command.CustomerId, command.BranchId);
             await _saleRepository.UpdateAsync(existingSale);
             return existingSale.Id;
         }

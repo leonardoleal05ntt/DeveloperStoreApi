@@ -1,6 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Bogus;
 using Bogus.Extensions.Brazil;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
 {
@@ -14,7 +15,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
 
         public static Customer GenerateValidCustomer()
         {
-            return CustomerFaker.Generate();
+            var command = CustomerFaker.Generate();
+            command.Id = Guid.NewGuid();
+            return command;
         }
 
         public static string GenerateValidCustomerName()

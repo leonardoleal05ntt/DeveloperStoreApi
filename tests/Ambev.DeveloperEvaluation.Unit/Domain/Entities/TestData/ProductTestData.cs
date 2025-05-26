@@ -10,7 +10,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
 
         public static Product GenerateValidProduct()
         {
-            return ProductFaker.Generate();
+            var command = ProductFaker.Generate();
+            command.Id = Guid.NewGuid();
+            return command;
         }
 
         public static string GenerateValidProductName()

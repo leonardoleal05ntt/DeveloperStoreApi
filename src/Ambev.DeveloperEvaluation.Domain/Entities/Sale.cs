@@ -32,5 +32,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         }
 
         public void Cancel() => IsCancelled = !IsCancelled;
+
+        public void Update(string saleNumber, Guid customerId, Guid branchId)
+        {
+            SaleNumber = saleNumber;
+            CustomerId = customerId;
+            BranchId = branchId;
+        }
     }
 }

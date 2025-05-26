@@ -10,7 +10,9 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
 
         public static Branch GenerateValidBranch()
         {
-            return BranchFaker.Generate();
+            var command = BranchFaker.Generate();
+            command.Id = Guid.NewGuid();
+            return command;
         }
 
         public static string GenerateValidBranchName()

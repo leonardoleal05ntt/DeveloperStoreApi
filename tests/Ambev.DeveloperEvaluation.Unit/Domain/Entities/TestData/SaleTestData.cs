@@ -17,11 +17,13 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData
         public static Sale GenerateValidSale(bool withItems = false, int itemCount = 3)
         {
             var sale = SaleFaker.Generate();
+            sale.Id = Guid.NewGuid();
             if (withItems)
             {
                 var items = SaleItemTestData.GenerateValidSaleItems(itemCount);
                 foreach (var item in items)
                 {
+                    item.Id = Guid.NewGuid();
                     sale.AddItem(item);
                 }
             }
